@@ -7,10 +7,14 @@
  */
 
 class MarkingGuide {
-    public $marking_guide = array ();
-    public $subjects = array();
+    public $marking_guide;
+    public $subjects;
+    public $subjects_answers;
 
     function __construct (){
+        $this->subjects = array();
+        $this->subjects_answers = array();
+        $this->marking_guide = array();
 
     }
 
@@ -23,14 +27,18 @@ class MarkingGuide {
         if (!empty($input)){
             list($subject,$ques_answers) = explode(':', $input);
             $subject = str_replace(array('[',']'),'',$subject);
-            $key = array_search($subject, $this->subjects);
+            $answers= preg_replace('/[0-9]+/','',$ques_answers);
+            $answers = str_replace(',','',$answers);
+            $marking_guide_answers = explode(';',$answers);
+            unset($marking_guide_answers[count($marking_guide_answers)-1]);
+            $key = array_search($subject , $this->subjects);
 
-
-            if(is_numeric($key)){
-                $this->update_marking_guide($input,$key, $subject);
+            if(array_key_exists($subject , $this->subjects_answers)){
+                $this->update_marking_guide($input,$key,$marking_guide_answers, $subject);
             }else{
                 array_push($this->marking_guide, $input);
                 array_push($this->subjects, $subject);
+                $this->subjects_answers[$subject]= $marking_guide_answers;
             }
         }else{
             return false;
@@ -46,10 +54,13 @@ class MarkingGuide {
         $index--;
 
         if(array_key_exists($index,$this->marking_guide)){
+            $subject = $this->subjects[$index];
             unset($this->marking_guide[$index]);
             unset($this->subjects[$index]);
+            unset($this->subjects_answers[$subject]);
             $this->marking_guide = array_values($this->marking_guide);
             $this->subjects = array_values($this->subjects);
+            $this->subjects_answers = array_values($this->subjects_answers);
             return true;
         }else{
             return false;
@@ -82,9 +93,10 @@ class MarkingGuide {
      * @param key
      * @param subject
      */
-    public function update_marking_guide($input,$key, $subject){
+    public function update_marking_guide($input,$key,$answers, $subject){
         $this->marking_guide[$key] = $input;
         $this->subjects[$key] = $subject;
+        $this->subjects_answers[$subject] = $answers;
     }
     /*
      * validates marking guide input to ensure it conforms to the outlined format

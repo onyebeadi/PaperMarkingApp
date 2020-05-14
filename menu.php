@@ -29,30 +29,30 @@ do{
             if(($marking_guide_obj->validate_input($input))){
                 $status = $marking_guide_obj->save_marking_guide($input);
                 if($status){
-                    echo"\e[1;31;40m Saved Successfully \e[1;32;40m\n";
+                    echo"\e[1;31;40m Saved Successfully \e[1;32;40m\n\n";
                 }else{
-                    echo"\e[1;31;40m Invalid format for marking guide \e[1;32;40m\n";
+                    echo"\e[1;31;40m Invalid format for marking guide \e[1;32;40m\n\n";
                 }
             }else{
-                echo"\e[1;31;40m Invalid format for marking guide \e[1;32;40m\n";
+                echo"\e[1;31;40m Invalid format for marking guide \e[1;32;40m\n\n";
             }
 
 
             break;
         case "2":
             $marking_guide_obj->list_marking_guide();
-            echo "Enter number of Marking guide you wish to delete\n";
+            echo "Enter number of Marking guide you wish to delete\n\n";
             $input = trim(fgets(STDIN));
             if(is_numeric($input)){
                 $status = $marking_guide_obj->delete_marking_guide($input);
                 if($status){
-                    echo"\e[1;31;40m Deleted successfully \e[1;32;40m\n";
+                    echo"\e[1;31;40m Deleted successfully \e[1;32;40m\n\n";
                 }else{
-                    echo"\e[1;31;40m Invalid Index \e[1;32;40m \n";
+                    echo"\e[1;31;40m Invalid Index \e[1;32;40m \n\n";
                 }
 
             }else{
-                echo"\e[1;31;40m Invalid input \e[1;32;40m \n";
+                echo"\e[1;31;40m Invalid input \e[1;32;40m \n\n";
             }
             break;
         case "3":
@@ -65,12 +65,12 @@ do{
                 $answer_paper_obj->set_answer_paper($input);
                 $output =$answer_paper_obj->mark_paper();
                 if(is_array($output)){
-                    echo"Your score is : ".$output[0]."/".$output[1]." and your percentage is: ".($output[0]/$output[1]*100)."%\n";
+                    echo"Your score is : ".$output[0]."/".$output[1]." and your percentage is: ".($output[0]/$output[1]*100)."%\n\n";
                 }else{
-                    echo" \e[1;31;40m Cannot Mark paper \e[1;32;40m \n";
+                    echo" \e[1;31;40m Marking guide deos not exist so Cannot Mark paper \e[1;32;40m \n\n";
                 }
             }else{
-                echo"\e[1;31;40m Invalid format for answer paper \e[1;32;40m\n";
+                echo"\e[1;31;40m Invalid format for answer paper \e[1;32;40m\n\n";
             }
 
             break;

@@ -25,6 +25,7 @@ class AnswerPaper{
             $answers= preg_replace('/[0-9]+/','',$ques_answers);
             $answers = str_replace(',','',$answers);
             $this->answers = explode(';',$answers);
+            unset($this->answers[(count($this->answers)-1)]);
         }else{
             return false;
         }
@@ -37,22 +38,17 @@ class AnswerPaper{
      */
 
     public function mark_paper(){
-        $key = array_search($this->answer_subject, $this->marking_guide_obj->subjects);
+        $key = array_search($this->answer_subject, $this->marking_guide_obj->subjects );
 
         if(is_numeric($key)){
-            list($subject,$ques_answers) = explode(':', $this->marking_guide_obj->marking_guide[$key]);
-            $answers= preg_replace('/[0-9]+/','',$ques_answers);
-            $answers = str_replace(',','',$answers);
-            $marking_guide_answers = explode(';',$answers);
             $score = 0;
-            unset($marking_guide_answers[count($marking_guide_answers)-1]);
-            unset($this->answers[(count($this->answers)-1)]);
+
             for ($i = 0 ; $i < count($this->answers); $i++){
-                if($this->answers[$i] == $marking_guide_answers[$i] ){
+                if($this->answers[$i] == $this->marking_guide_obj->subjects_answers[$this->answer_subject][$i] ){
                     $score++;
                 }
             }
-            $output = array($score , count($marking_guide_answers) );
+            $output = array($score , count($this->marking_guide_obj->subjects_answers[$this->answer_subject]) );
             return $output;
 
         }else{
